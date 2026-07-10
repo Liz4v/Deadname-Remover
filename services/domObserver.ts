@@ -77,6 +77,12 @@ export class DOMObserver {
             }
           })
         }
+        else if (mutation.type === 'characterData') {
+          // For text changes, we still need to process the parent element
+          // to ensure we catch all related changes
+          const parent = mutation.target.parentElement
+          if (parent) pendingRoots.add(parent)
+        }
       }
       if (pendingRoots.size > 0 && !scheduled) {
         const observerForThisFlush = this.observer
@@ -111,6 +117,7 @@ export class DOMObserver {
             observerForThisFlush.observe(document.body, {
               childList: true,
               subtree: true,
+              characterData: true,
             })
           }
         })
@@ -120,6 +127,7 @@ export class DOMObserver {
     this.observer.observe(document.body, {
       childList: true,
       subtree: true,
+      characterData: true,
     })
   }
 
