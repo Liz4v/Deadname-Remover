@@ -2,30 +2,41 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>characterData mutation demo — Deadname Remover</title>
 <style>
   body {
     font-family: system-ui, sans-serif;
     max-width: 34rem;
     margin: 3rem auto;
+    padding: 0 1rem;
     line-height: 1.5;
+    box-sizing: border-box;
   }
-  label { font-weight: 600; }
+  label {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 0.4rem;
+  }
   input[type="password"] {
     font-size: 1rem;
     padding: 0.3rem 0.5rem;
-    margin-left: 0.5rem;
+    width: 100%;
+    box-sizing: border-box;
   }
   /* Censored: gray on gray, but the span's width betrays the text length.
      The extension's own highlight shows when a replacement happened. */
   #mirror {
     display: inline-block;
+    max-width: 100%;
     margin-top: 1rem;
     padding: 0.5rem 0.75rem;
     font-size: 1.25rem;
     border-radius: 6px;
     background: #888;
     color: #888;
+    overflow-wrap: break-word;
+    word-break: break-word;
   }
   #status { color: #666; font-size: 0.85rem; margin-top: 0.5rem; }
 </style>
@@ -33,7 +44,10 @@
 <body>
   <h1>characterData mutation demo</h1>
   <p>
-    A demo for <a href="https://github.com/arimgibson/Deadname-Remover/issues/672">Deadname-Remover#672</a>
+    A demo for
+    <a href="https://chromewebstore.google.com/detail/deadname-remover/cceilgmnkeijahkehfcgfalepihfbcag">Deadname Remover</a>'s
+    <a href="https://github.com/arimgibson/Deadname-Remover/issues/672">issue #672</a> and
+    <a href="https://github.com/arimgibson/Deadname-Remover/pull/673">pull request #673</a>.
   </p>
 
   <label for="pw">Write some bad words:</label>
