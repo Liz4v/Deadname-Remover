@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>characterData mutation demo — Deadname Remover</title>
+<style>
+  body {
+    font-family: system-ui, sans-serif;
+    max-width: 34rem;
+    margin: 3rem auto;
+    line-height: 1.5;
+  }
+  label { font-weight: 600; }
+  input[type="password"] {
+    font-size: 1rem;
+    padding: 0.3rem 0.5rem;
+    margin-left: 0.5rem;
+  }
+  /* Censored: gray on gray, but the span's width betrays the text length.
+     The extension's own highlight shows when a replacement happened. */
+  #mirror {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.5rem 0.75rem;
+    font-size: 1.25rem;
+    border-radius: 6px;
+    background: #888;
+    color: #888;
+  }
+  #status { color: #666; font-size: 0.85rem; margin-top: 0.5rem; }
+</style>
+</head>
+<body>
+  <h1>characterData mutation demo</h1>
+  <p>
+    A demo for <a href="https://github.com/arimgibson/Deadname-Remover/issues/672">Deadname-Remover#672</a>
+  </p>
+
+  <label for="pw">Write some bad words:</label>
+  <input type="password" id="pw" value="alpha male chad looksmaxxing" autocomplete="off">
+
+  <br>
+  <span id="mirror">alpha male chad looksmaxxing</span>
+  <div id="status">last page mutation: (none yet)</div>
+
+<script>
+  const input = document.getElementById('pw')
+  const mirror = document.getElementById('mirror')
+  const status = document.getElementById('status')
+
+  // Keep a handle on the text node so keystrokes update it in place.
+  let textNode = mirror.firstChild
+
+  input.addEventListener('input', () => {
+    if (textNode && textNode.isConnected) {
+      // In-place update: fires a characterData mutation. This is the path
+      // that silently did nothing before commit ed1871f.
+      textNode.data = input.value
+      status.textContent = 'last page mutation: characterData (in-place text update)'
+    }
+    else {
+      // The extension replaced our text node with <mark> elements; rebuild
+      // a fresh text node. This fires childList instead, and always worked.
+      textNode = document.createTextNode(input.value)
+      mirror.replaceChildren(textNode)
+      status.textContent = 'last page mutation: childList (node rebuilt after replacement)'
+    }
+  })
+</script>
+</body>
+</html>
