@@ -67,5 +67,9 @@ describe('DOMObserver', () => {
     await new Promise(resolve => setTimeout(resolve, 0))
 
     expect(processSubtree).toHaveBeenCalledWith(fakeParent, replacements, false)
+
+    // The flush path disconnects and re-observes; make sure the
+    // re-observation still requests characterData mutations.
+    expect(instance.lastObserveOptions?.characterData).toBe(true)
   })
 })
