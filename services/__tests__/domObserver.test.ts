@@ -24,6 +24,7 @@ class FakeMutationObserver {
 
 vi.stubGlobal('MutationObserver', FakeMutationObserver)
 vi.stubGlobal('document', { body: {} })
+vi.stubGlobal('Node', { TEXT_NODE: 3 })
 
 afterAll(() => {
   vi.unstubAllGlobals()
@@ -54,7 +55,11 @@ describe('DOMObserver', () => {
       getAttribute: () => null,
       querySelectorAll: () => [],
     } as unknown as HTMLElement
-    const fakeTextNode = { parentElement: fakeParent } as unknown as Node
+    const fakeTextNode = {
+      nodeType: Node.TEXT_NODE,
+      nodeValue: 'Hello Deadname, welcome',
+      parentElement: fakeParent,
+    } as unknown as Node
 
     const [instance] = FakeMutationObserver.instances
     instance.callback(
